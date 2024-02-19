@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>XSupportStat</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            width: 80%;
+            margin: auto;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .dashboard-item {
+            border: 1px solid #000;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        .dashboard-row {
+            display: flex;
+            justify-content: space-between;
+        }
+        .dashboard-row > div {
+            width: 48%; /* Adjust width for spacing between items */
+        }
+        .dropdown {
+            width: 100%;
+            margin-bottom: 20px;
+        }
+        .chart {
+            height: 200px; /* Adjust height as needed */
+            background-color: #f0f0f0; /* Placeholder style */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        select {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Dashboard</h1>
+            <p>TITLE_1</p>
+        </div>
+
+        <div class="dashboard-row">
+            <div class="dashboard-item">
+                <select class="dropdown">
+                    <option>Select Brand</option>
+                    <!-- Populate with brands -->
+                </select>
+                <div class="chart">GRAPH_1</div>
+            </div>
+            <div class="dashboard-item">
+                <select class="dropdown">
+                    <option>Select Brand</option>
+                    <!-- Populate with brands -->
+                </select>
+                <div class="chart">GRAPH_2</div>
+            </div>
+        </div>
+
+        <div class="dashboard-item">
+            <h2>SEG_1</h2>
+            <p>DESC_1</p>
+            <div class="chart">GRAPH_3</div>
+        </div>
+
+        <div class="dashboard-item">
+            <h2>SEG_2</h2>
+            <p>DESC_2</p>
+            <div class="chart">GRAPH_4</div>
+        </div>
+
+        <div class="dashboard-item">
+            <h2>SEG_3</h2>
+            <div class="chart">GRAPH_5</div>
+        </div>
+    </div>
+
+    <!-- Charting library, JS, etc... -->
+    <script src="path/to/your/charting-library.js"></script>
+    <script>
+        // JavaScript for dropdown changes and chart updates
+    </script>
+</body>
+</html>
