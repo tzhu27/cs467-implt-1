@@ -17,8 +17,8 @@ $(document).ready(function() {
                         gridSize: 10, // Increased from 8 to 10 for more space between words
                         weightFactor: function (size) {
                             // Adjusted calculation for font size scaling
-                            const minFontSize = 10; // Minimum font size
-                            const maxFontSize = 60; // Maximum font size
+                            const minFontSize = 10;
+                            const maxFontSize = 60;
                     
                             // Determine the max count for scaling
                             const maxCount = Math.max(...response.map(item => item[1]));
@@ -30,7 +30,7 @@ $(document).ready(function() {
                         },
                         fontFamily: 'Roboto, sans-serif',
                         color: 'random-dark',
-                        rotateRatio: 0.5,
+                        rotateRatio: 0,
                         backgroundColor: '#ffffff'
                     });
                     

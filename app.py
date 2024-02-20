@@ -32,7 +32,7 @@ def update_word_cloud():
     words_list = [[word, count] for word, count in words.items()]
     
     # Return a JSON response
-    return jsonify(words_list)
+    return jsonify(words_list[:100])
 
 @app.route('/')
 def home():
@@ -41,4 +41,4 @@ def home():
     return render_template('index.html', companies=companies)
 
 if __name__ == '__main__':
-    app.run(debug=True)  # It's safer to not use host='0.0.0.0' and port=80 unless specifically needed
+    app.run(host='0.0.0.0', port=80, debug=True)  # It's safer to not use host='0.0.0.0' and port=80 unless specifically needed
