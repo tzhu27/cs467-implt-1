@@ -34,6 +34,21 @@ def update_word_cloud():
     # Return a JSON response
     return jsonify(words_list[:100])
 
+@app.route('/get-bar-chart-data')
+def get_bar_chart_data():
+    response_counts = {}
+    for tweet in tweets:
+        company_name = tweet['author_id']
+        response_counts[company_name] = response_counts.get(company_name, 0) + 1
+    
+    # Sort and get top 20 companies
+    sorted_companies = sorted(response_counts.items(), key=lambda x: x[1], reverse=True)[:20]
+    company_names = [company[0] for company in sorted_companies]
+    response_rates = [count[1] for count in sorted_companies]
+    
+    return jsonify({'companyNames': company_names, 'responseRates': response_rates})
+
+
 @app.route('/')
 def home():
     global tweets

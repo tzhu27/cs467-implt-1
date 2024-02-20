@@ -1,38 +1,13 @@
 function generateCountResponseBarChart() {
-    // Read CSV file using fetch API
-    fetch('/static/data/twcs.csv')
-        .then(response => response.text())
-        .then(csvData => {
-            // Parse CSV data
-            const parsedData = Papa.parse(csvData, { header: true }).data;
-
-            // Initialize company response count object
-            const responseCounts = {};
-
-            // Iterate through parsed data
-            parsedData.forEach(row => {
-                // Check if the tweet is inbound (sent by a customer to the company)
-                if (row.inbound === 'False') {
-                    // Extract company name from text column
-                    const companyName = row.author_id
-
-                    responseCounts[companyName] = (responseCounts[companyName] || 0) + 1;
-                }
-            });
-
-            // Sort companies by response counts in descending order
-            const sortedCompanies = Object.keys(responseCounts).sort((a, b) => responseCounts[b] - responseCounts[a]);
-
-            // Take top 20 companies
-            const top20Companies = sortedCompanies.slice(0, 20);
-
-            // Extract company names and response counts for top 20 companies
-            const companyNames = top20Companies;
-            const responseRates = top20Companies.map(company => responseCounts[company]);
+    fetch('/get-bar-chart-data')
+        .then(response => response.json())
+        .then(data => {
+            // Extract company names and response rates from the response
+            const { companyNames, responseRates } = data;
 
             // Generate bar chart
             const ctx = document.getElementById('responseRateChart').getContext('2d');
-            const responseRateChart = new Chart(ctx, {
+            new Chart(ctx, {
                 type: 'bar',
                 data: {
                     labels: companyNames,
@@ -55,12 +30,17 @@ function generateCountResponseBarChart() {
                     }
                 }
             });
+
+            // Optionally, remove the loading message
+            const container = document.getElementById('barChartContainer');
+            const pElement = container.querySelector('p'); // Adjust the selector as needed
+            if (pElement) {
+                pElement.remove();
+            }
         });
 }
 
-// Add event listener for button click event
-document.getElementById('generateChartButton').addEventListener('click', function() {
+document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('barChartContainer').style.display = 'block'; // Show chart container
     generateCountResponseBarChart(); // Call function to generate chart
 });
-
