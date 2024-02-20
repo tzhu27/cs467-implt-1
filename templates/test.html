@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Response Count Bar Chart</title>
+</head>
+<body>
+<h2>Response Count Bar Chart</h2>
+<button id="generateChartButton">Generate Chart</button> <!-- Button to generate chart -->
+<div style="width: 800px; display: none;" id="chartContainer"> <!-- Chart container initially hidden -->
+    <canvas id="responseRateChart"></canvas>
+</div>
+<!-- Include Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
+<script src="index.js"></script> <!-- Include index.js -->
+</body>
+</html>

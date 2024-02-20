@@ -5,7 +5,7 @@ app = Flask(__name__)
 
 # Load tweets at app start
 def read_csv():
-    df = pd.read_csv('twcs.csv')
+    df = pd.read_csv('static/data/twcs.csv')
     return df.to_dict(orient='records')
 
 tweets = read_csv()
