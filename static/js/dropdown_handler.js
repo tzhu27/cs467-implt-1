@@ -108,4 +108,12 @@ $(document).ready(function() {
     }, 100);
 
     window.addEventListener('resize', redrawDebounced);
+
+    //SA
+    var initialSelectedCompany = $('#sentiment-analysis').val();
+    sentimentAnalysisExec(initialSelectedCompany);
+    $('#sentiment-analysis').change(function() {
+        var selectedCompany = $(this).val();
+        sentimentAnalysisExec(selectedCompany);
+    });
 });
