@@ -99,17 +99,19 @@
         <div class="header">
             <h1>Dashboard</h1>
         </div>
-
+        
+        <!-- Top graphs -->
         <div class="dashboard-row">
             <div class="dashboard-item">
-
+                
+                <!-- Word cloud -->
                 <select class="dropdown" id="dropdown-word-cloud">
                     {% for company in companies %}
                         <option>{{ company }}</option>
                     {% endfor %}
                 </select>
 
-                <!-- Word cloud -->
+                <!-- Tree map -->
                 <div class="chart" id="word-cloud">
                     <p id="msg_loading_wordcloud" style="text-align: center;">Loading...</p>
                 </div>
@@ -135,12 +137,13 @@
             <script src="{{ url_for('static', filename='js/barchart_handler.js') }}"></script>
         </div>
 
+        <!-- TODO GRAPH 1 -->
         <div class="dashboard-item">
             <h2>SEG_2</h2>
-            <p>DESC_2</p>
             <div class="chart">GRAPH_4</div>
         </div>
 
+        <!-- TODO GRAPH 2 -->
         <div class="dashboard-item">
             <h2>SEG_3</h2>
             <div class="chart">GRAPH_5</div>
