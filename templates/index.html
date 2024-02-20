@@ -32,10 +32,12 @@
         }
         
         .dashboard-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
             background-color: #5cabec;
-            /* Pure white for cards */
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            /* Subtle shadow for depth */
             border-radius: 8px;
             padding: 20px;
             margin-bottom: 20px;
@@ -89,6 +91,12 @@
                 flex-direction: column;
             }
         }
+
+        #word-cloud-container {
+            width: 100%;
+            position: relative;
+            overflow: hidden;
+        }
         
         #barChartContainer {
             position: relative;
@@ -96,6 +104,7 @@
             text-align: center;
             height: 260px;
             width: 100%;
+            overflow: hidden;
         }
         
         #msg_loading_barchart {
@@ -126,26 +135,31 @@
         <div class="dashboard-row">
             <div class="dashboard-item">
 
-                <!-- Word cloud -->
+                <!-- Word cloud dropdown -->
                 <select class="dropdown" id="dropdown-word-cloud">
                     {% for company in companies %}
                         <option>{{ company }}</option>
                     {% endfor %}
                 </select>
 
-                <!-- Tree map -->
-                <div class="chart" id="word-cloud">
-                    <p id="msg_loading_wordcloud" style="text-align: center;">Loading...</p>
+                <!-- Word cloud -->
+                <div class="chart" id="word-cloud-container">
+                    <p id="msg_loading_tree_map" style="text-align: center;">Loading...</p>
                 </div>
-
+                
             </div>
             <div class="dashboard-item">
-                <select class="dropdown" id="treemap-word-cloud">
+                
+                <!-- Tree map dropdown -->
+                <select class="dropdown" id="dropdown-treemap">
                     {% for company in companies %}
                         <option>{{ company }}</option>
                     {% endfor %}
                 </select>
-                <div class="chart">TREE_MAP</div>
+                
+                <!-- Tree map -->
+                <div class="chart" id="tree-map-container">TREE_MAP</div>
+
             </div>
         </div>
 

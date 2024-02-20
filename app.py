@@ -32,7 +32,7 @@ def update_word_cloud():
     words_list = [[word, count] for word, count in words.items()]
     
     # Return a JSON response
-    return jsonify(words_list[:150])
+    return jsonify(words_list[:500])
 
 @app.route('/get-bar-chart-data')
 def get_bar_chart_data():
