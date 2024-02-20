@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -15,61 +16,80 @@
             margin: 0;
             padding: 0;
         }
+        
         .container {
             max-width: 95%;
             margin: auto;
             padding: 20px;
             box-sizing: border-box;
         }
+        
         .header {
             text-align: center;
             margin-bottom: 30px;
-            color: #000000; /* Soft blue for headings */
+            color: #000000;
+            /* Soft blue for headings */
         }
+        
         .dashboard-item {
-            background-color: #5cabec; /* Pure white for cards */
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1); /* Subtle shadow for depth */
+            background-color: #5cabec;
+            /* Pure white for cards */
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            /* Subtle shadow for depth */
             border-radius: 8px;
             padding: 20px;
             margin-bottom: 20px;
             transition: box-shadow 0.3s ease-in-out;
         }
+        
         .dashboard-item:hover {
-            box-shadow: 0 5px 15px rgb(163, 163, 163); /* More pronounced shadow on hover */
+            box-shadow: 0 5px 15px rgb(163, 163, 163);
+            /* More pronounced shadow on hover */
         }
+        
         .dashboard-row {
             display: flex;
             flex-wrap: wrap;
             justify-content: space-between;
             gap: 20px;
         }
-        .dashboard-row > div {
+        
+        .dashboard-row>div {
             flex: 1;
-            min-width: 280px; /* Flexibility with minimum width */
+            min-width: 280px;
+            /* Flexibility with minimum width */
         }
-        .dropdown, select {
+        
+        .dropdown,
+        select {
             width: 100%;
             padding: 10px;
             border-radius: 4px;
-            background-color: #ffffff; /* Very light grey for input background */
+            background-color: #ffffff;
+            /* Very light grey for input background */
             margin-bottom: 20px;
             box-sizing: border-box;
-            color: #333; /* Text color */
+            color: #333;
+            /* Text color */
         }
+        
         .chart {
             width: 100%;
             height: 300px;
-            background-color: #ffffff; /* Light blue grey for chart background */
+            background-color: #ffffff;
+            /* Light blue grey for chart background */
             display: flex;
             align-items: center;
             justify-content: center;
             border-radius: 4px;
         }
+        
         @media (max-width: 768px) {
             .dashboard-row {
                 flex-direction: column;
             }
         }
+        
         #barChartContainer {
             position: relative;
             background-color: #ffffff;
@@ -77,6 +97,7 @@
             height: 260px;
             width: 100%;
         }
+        
         #msg_loading_barchart {
             position: absolute;
             top: 50%;
@@ -93,17 +114,18 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
 <script src="{{ url_for('static', filename='js/wordcloud2.js') }}"></script>
 <script src="{{ url_for('static', filename='js/dropdown_handler.js') }}"></script>
+<script src="{{ url_for('static', filename='js/interactivebarchart/index.js') }}"></script>
 
 <body>
     <div class="container">
         <div class="header">
             <h1>Dashboard</h1>
         </div>
-        
+
         <!-- Top graphs -->
         <div class="dashboard-row">
             <div class="dashboard-item">
-                
+
                 <!-- Word cloud -->
                 <select class="dropdown" id="dropdown-word-cloud">
                     {% for company in companies %}
@@ -115,7 +137,7 @@
                 <div class="chart" id="word-cloud">
                     <p id="msg_loading_wordcloud" style="text-align: center;">Loading...</p>
                 </div>
-                
+
             </div>
             <div class="dashboard-item">
                 <select class="dropdown" id="treemap-word-cloud">
@@ -126,7 +148,7 @@
                 <div class="chart">TREE_MAP</div>
             </div>
         </div>
-        
+
         <!-- Bar Chart -->
         <div class="dashboard-item">
             <h2>Response Count by Company (Top 20)</h2>
@@ -140,7 +162,10 @@
         <!-- TODO GRAPH 1 -->
         <div class="dashboard-item">
             <h2>SEG_2</h2>
-            <div class="chart">GRAPH_4</div>
+            <div id="sunburst-chart" style="background-color: #ffffff; text-align: center;"></div>
+            <script type="module">
+                import define from "/static/js/interactivebarchart/index.js"; import {Runtime, Library, Inspector} from "/static/js/interactivebarchart/runtime.js"; const runtime = new Runtime(); const main = runtime.module(define, Inspector.into(document.getElementById('sunburst-chart')));
+            </script>
         </div>
 
         <!-- TODO GRAPH 2 -->
@@ -156,10 +181,5 @@
         // JavaScript for dropdown changes and chart updates
     </script>
 </body>
+
 </html>
-
-
-
-
-
-
