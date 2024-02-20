@@ -148,7 +148,7 @@
         </div>
         <!-- TODO GRAPH 1 -->
         <div class="dashboard-item1">
-            <h2>SEG_2</h2>
+            <h2 style="text-align: center;">Sectors, brands and categories of issues</h2>
             <div id="sunburst-chart" style="background-color: #ffffff; text-align: center;"></div>
             <script type="module">
                 import define from "/static/js/zoomable/index.js"; import {Runtime, Library, Inspector} from "/static/js/zoomable/runtime.js"; const runtime = new Runtime(); const main = runtime.module(define, Inspector.into(document.getElementById('sunburst-chart')));
@@ -174,8 +174,8 @@
 
             </div>
             <div class="dashboard-item">
-                <h2>⚠️ CHANGE_GRAPH_NAME_HERE</h2>
-                <p style="text-align: center;">⚠️ Write some description here!</p>
+                <h2>Sentiment analysis of Brands</h2>
+                <p style="text-align: center;">Sentiment analysis of brands, click on the bar to know something more!</p>
 
                 <select class="dropdown" id="sentiment-analysis">
                     {% for company in companies %}
