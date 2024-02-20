@@ -39,23 +39,42 @@ def update_sentiment_analysis():
     data = request.get_json()
     company = data.get('selectedCompany')
     
-    positive_words = ["good", "great", "excellent", "awesome", "positive"]
-    negative_words = ["bad", "terrible", "horrible", "awful", "negative"]
+    positive_words = ["excellent", "awesome", "positive", "authentic", "resolved", "escalate", "taking action", "brilliant", "phenomenal"]
+    negative_words = [
+    "late", "delayed", "overdue", "awaiting delivery", "difficulty",
+    "expired", "missing", "poor", "damaged", "unsafe",
+    "disappointed", "expired", "unauthorized", "dispute", "barrier", "counterfeit",
+    "hacked", "breached", "stolen", "discontinued", "frustration", "unsatisfactory",
+    "horrible"
+    ]
+
     
     positive_count = 0
     negative_count = 0
-    
+    sneg = {}
+    spos = {}
     for tweet in tweets:
         if company in tweet['text']:
             text = tweet['text'].lower()  # Convert text to lowercase for case-insensitive matching
             for word in text.split():
                 if word in positive_words:
+                    if word in spos:
+                        spos[word] += 1
+                    else:
+                        spos[word] = 1
                     positive_count += 1
-                elif word in negative_words:
+                if word in negative_words:
+                    if word in sneg:
+                        sneg[word] += 1
+                    else:
+                        sneg[word] = 1
                     negative_count += 1
         
     # Return a JSON response with sentiment analysis results
-    return jsonify({'Company': company, 'PositiveWords': positive_count, 'NegativeWords': negative_count})
+    pos = dict(sorted(spos.items(), key=lambda item: item[1], reverse=True)[:5])
+    neg = dict(sorted(sneg.items(), key=lambda item: item[1], reverse=True)[:10])
+
+    return jsonify({'Company': company, 'PositiveWords': positive_count, 'NegativeWords': negative_count, 'Pos': pos, 'Neg': neg})
 
 @app.route('/get-bar-chart-data')
 def get_bar_chart_data():
@@ -79,4 +98,4 @@ def home():
     return render_template('index.html', companies=companies)
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=81, debug=True)  # It's safer to not use host='0.0.0.0' and port=80 unless specifically needed
+    app.run(host='0.0.0.0', port=4001, debug=True)  # It's safer to not use host='0.0.0.0' and port=80 unless specifically needed

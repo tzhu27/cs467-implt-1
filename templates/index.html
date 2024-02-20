@@ -31,6 +31,21 @@
             /* Soft blue for headings */
         }
         
+        .dashboard-item1 {
+            background-color: #5cabec;
+            /* Pure white for cards */
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            /* Subtle shadow for depth */
+            background-color: #5cabec;
+            /* Pure white for cards */
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            /* Subtle shadow for depth */
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            transition: box-shadow 0.3s ease-in-out;
+        }
+        
         .dashboard-item {
             display: flex;
             flex-direction: column;
@@ -125,15 +140,15 @@
 <script src="{{ url_for('static', filename='js/dropdown_handler.js') }}"></script>
 <script src="{{ url_for('static', filename='js/zoomable/index.js') }}"></script>
 
+
 <body>
     <div class="container">
         <div class="header">
             <h1>Dashboard</h1>
         </div>
         <!-- TODO GRAPH 1 -->
-        <div class="dashboard-item">
-            <h2>⚠️ CHANGE_GRAPH_NAME_HERE</h2>
-            <p style="text-align: center;">⚠️ Write some description here!</p>
+        <div class="dashboard-item1">
+            <h2>SEG_2</h2>
             <div id="sunburst-chart" style="background-color: #ffffff; text-align: center;"></div>
             <script type="module">
                 import define from "/static/js/zoomable/index.js"; import {Runtime, Library, Inspector} from "/static/js/zoomable/runtime.js"; const runtime = new Runtime(); const main = runtime.module(define, Inspector.into(document.getElementById('sunburst-chart')));
@@ -168,7 +183,8 @@
                     {% endfor %}
                 </select>
                 <div class="chart" id="senti">
-                    <p id="msg_loading_wordcloud" style="text-align: center;">Loading...</p>
+                    <!-- Add a canvas element for the chart -->
+                    <canvas id="combined-chart"></canvas>
                 </div>
             </div>
         </div>

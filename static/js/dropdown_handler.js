@@ -33,6 +33,7 @@ function generateWordCloudForCompany(selectedCompany) {
         }
     });
 }
+var myChart = null;
 
 function sentimentAnalysisExec(selectedCompany) {
     $.ajax({
@@ -43,9 +44,15 @@ function sentimentAnalysisExec(selectedCompany) {
         success: function(response) {
             if (response && response.Company) {
                 // Create a horizontal bar chart using Chart.js
-                var ctx = document.getElementById('senti').getContext('2d');
-                var chart = new Chart(ctx, {
-                    type: 'horizontalBar',
+                var ctx = document.getElementById('combined-chart').getContext('2d');
+                if (myChart) {
+                    myChart.destroy();
+                }
+                if (window.wordPieChart) {
+                    window.wordPieChart.destroy();
+                }
+                myChart = new Chart(ctx, {
+                    type: 'bar',
                     data: {
                         labels: ['Positive Words', 'Negative Words'],
                         datasets: [{
@@ -66,12 +73,86 @@ function sentimentAnalysisExec(selectedCompany) {
                         }
                     }
                 });
+
+                /*document.getElementById("sentiment-chart").onclick = function(event, elements) {
+
+                    if (elements && elements.length > 0) {
+                        var index = elements[0]._index;
+                        if (index === 0) {
+                            displayWords(response.Pos);
+                        } else if (index === 1) {
+                            displayWords(response.Neg);
+                        }
+                    }
+                }*/
+                // Attach click event handler to the chart
+                ctx.canvas.onclick = function(event) {
+                    var activePoint = myChart.getActiveElements(event)[0];
+                    if (activePoint) {
+                        var datasetIndex = activePoint.datasetIndex;
+                        var index = activePoint.index;
+                        if (datasetIndex === 0 && index === 0) {
+                            displayWords(myChart, response.Pos);
+                        } else if (datasetIndex === 0 && index === 1) {
+                            displayWords(myChart, response.Neg);
+                        }
+                    }
+                };
+
             } else {
                 console.log('No data returned for Sentiment analysis');
             }
         },
         error: function(error) {
             console.error("Error updating SA:", error);
+        }
+    });
+}
+
+/*function displayWords(words) {
+    // Assuming words is an object where keys are the words and values are their counts
+    for (const word in words) {
+        console.log(`${word}: ${words[word]}`);
+    }
+}*/
+function displayWords(myChart, words) {
+    // Extract words and counts from the object
+    const labels = Object.keys(words);
+    const data = Object.values(words);
+
+    // Generate random colors for each word
+    const colors = labels.map(() => '#' + Math.floor(Math.random() * 16777215).toString(16));
+
+    // Create pie chart data
+    const pieChartData = {
+        labels: labels,
+        datasets: [{
+            data: data,
+            backgroundColor: colors
+        }]
+    };
+
+    // Get the canvas context
+    const ctx = document.getElementById('combined-chart').getContext('2d');
+
+    // Destroy previous chart if exists
+    if (window.wordPieChart) {
+        window.wordPieChart.destroy();
+    }
+    if (myChart) myChart.destroy();
+    // Create new pie chart
+    window.wordPieChart = new Chart(ctx, {
+        type: 'pie',
+        data: pieChartData,
+        options: {
+            responsive: true,
+            legend: {
+                position: 'bottom'
+            },
+            title: {
+                display: true,
+                text: 'Word Frequency'
+            }
         }
     });
 }
