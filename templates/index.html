@@ -133,6 +133,7 @@
         <!-- TODO GRAPH 1 -->
         <div class="dashboard-item">
             <h2>⚠️ CHANGE_GRAPH_NAME_HERE</h2>
+            <p style="text-align: center;">⚠️ Write some description here!</p>
             <div id="sunburst-chart" style="background-color: #ffffff; text-align: center;"></div>
             <script type="module">
                 import define from "/static/js/zoomable/index.js"; import {Runtime, Library, Inspector} from "/static/js/zoomable/runtime.js"; const runtime = new Runtime(); const main = runtime.module(define, Inspector.into(document.getElementById('sunburst-chart')));
@@ -141,7 +142,8 @@
         <!-- Top graphs -->
         <div class="dashboard-row">
             <div class="dashboard-item">
-                <h2>Word cloud</h2>
+                <h2>Word Cloud</h2>
+                <p style="text-align: center;">The most frequent words used by the customer support on Twitter</p>
 
                 <!-- Word cloud dropdown -->
                 <select class="dropdown" id="dropdown-word-cloud">
@@ -158,6 +160,8 @@
             </div>
             <div class="dashboard-item">
                 <h2>⚠️ CHANGE_GRAPH_NAME_HERE</h2>
+                <p style="text-align: center;">⚠️ Write some description here!</p>
+
                 <select class="dropdown" id="sentiment-analysis">
                     {% for company in companies %}
                         <option>{{ company }}</option>
