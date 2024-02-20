@@ -10,7 +10,7 @@ function generateWordCloudForCompany(selectedCompany) {
                 WordCloud(document.getElementById('word-cloud-container'), {
                     list: response,
                     gridSize: 10,
-                    weightFactor: function (size) {
+                    weightFactor: function(size) {
                         const minFontSize = 10;
                         const maxFontSize = 60;
                         const maxCount = Math.max(...response.map(item => item[1]));
@@ -34,11 +34,54 @@ function generateWordCloudForCompany(selectedCompany) {
     });
 }
 
+function sentimentAnalysisExec(selectedCompany) {
+    $.ajax({
+        url: '/update-sentiment-analysis',
+        type: 'POST',
+        contentType: 'application/json',
+        data: JSON.stringify({ 'selectedCompany': selectedCompany }),
+        success: function(response) {
+            if (response && response.Company) {
+                // Create a horizontal bar chart using Chart.js
+                var ctx = document.getElementById('senti').getContext('2d');
+                var chart = new Chart(ctx, {
+                    type: 'horizontalBar',
+                    data: {
+                        labels: ['Positive Words', 'Negative Words'],
+                        datasets: [{
+                            label: 'Sentiment Analysis for ' + response.Company,
+                            data: [response.PositiveWords, response.NegativeWords],
+                            backgroundColor: ['rgba(75, 192, 192, 0.6)', 'rgba(255, 99, 132, 0.6)'],
+                            borderColor: ['rgba(75, 192, 192, 1)', 'rgba(255, 99, 132, 1)'],
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        scales: {
+                            xAxes: [{
+                                ticks: {
+                                    beginAtZero: true
+                                }
+                            }]
+                        }
+                    }
+                });
+            } else {
+                console.log('No data returned for Sentiment analysis');
+            }
+        },
+        error: function(error) {
+            console.error("Error updating SA:", error);
+        }
+    });
+}
+
 // Debounce function to limit how often a function is executed
 function debounce(func, wait, immediate) {
     var timeout;
     return function() {
-        var context = this, args = arguments;
+        var context = this,
+            args = arguments;
         clearTimeout(timeout);
         timeout = setTimeout(function() {
             timeout = null;
@@ -63,6 +106,6 @@ $(document).ready(function() {
     var redrawDebounced = debounce(function() {
         generateWordCloudForCompany($('#dropdown-word-cloud').val());
     }, 100);
-    
+
     window.addEventListener('resize', redrawDebounced);
 });

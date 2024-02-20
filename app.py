@@ -34,6 +34,29 @@ def update_word_cloud():
     # Return a JSON response
     return jsonify(words_list[:500])
 
+@app.route('/update-sentiment-analysis', methods=['POST'])
+def update_sentiment_analysis():
+    data = request.get_json()
+    company = data.get('selectedCompany')
+    
+    positive_words = ["good", "great", "excellent", "awesome", "positive"]
+    negative_words = ["bad", "terrible", "horrible", "awful", "negative"]
+    
+    positive_count = 0
+    negative_count = 0
+    
+    for tweet in tweets:
+        if company in tweet['text']:
+            text = tweet['text'].lower()  # Convert text to lowercase for case-insensitive matching
+            for word in text.split():
+                if word in positive_words:
+                    positive_count += 1
+                elif word in negative_words:
+                    negative_count += 1
+        
+    # Return a JSON response with sentiment analysis results
+    return jsonify({'Company': company, 'PositiveWords': positive_count, 'NegativeWords': negative_count})
+
 @app.route('/get-bar-chart-data')
 def get_bar_chart_data():
     response_counts = {}
@@ -56,4 +79,4 @@ def home():
     return render_template('index.html', companies=companies)
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=80, debug=True)  # It's safer to not use host='0.0.0.0' and port=80 unless specifically needed
+    app.run(host='0.0.0.0', port=81, debug=True)  # It's safer to not use host='0.0.0.0' and port=80 unless specifically needed

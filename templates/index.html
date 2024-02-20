@@ -91,7 +91,7 @@
                 flex-direction: column;
             }
         }
-
+        
         #word-cloud-container {
             width: 100%;
             position: relative;
@@ -123,14 +123,21 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
 <script src="{{ url_for('static', filename='js/wordcloud2.js') }}"></script>
 <script src="{{ url_for('static', filename='js/dropdown_handler.js') }}"></script>
-<script src="{{ url_for('static', filename='js/interactivebarchart/index.js') }}"></script>
+<script src="{{ url_for('static', filename='js/zoomable/index.js') }}"></script>
 
 <body>
     <div class="container">
         <div class="header">
             <h1>Dashboard</h1>
         </div>
-
+        <!-- TODO GRAPH 1 -->
+        <div class="dashboard-item">
+            <h2>SEG_2</h2>
+            <div id="sunburst-chart" style="background-color: #ffffff; text-align: center;"></div>
+            <script type="module">
+                import define from "/static/js/zoomable/index.js"; import {Runtime, Library, Inspector} from "/static/js/zoomable/runtime.js"; const runtime = new Runtime(); const main = runtime.module(define, Inspector.into(document.getElementById('sunburst-chart')));
+            </script>
+        </div>
         <!-- Top graphs -->
         <div class="dashboard-row">
             <div class="dashboard-item">
@@ -146,20 +153,17 @@
                 <div class="chart" id="word-cloud-container">
                     <p id="msg_loading_tree_map" style="text-align: center;">Loading...</p>
                 </div>
-                
+
             </div>
             <div class="dashboard-item">
-                
-                <!-- Tree map dropdown -->
-                <select class="dropdown" id="dropdown-treemap">
+                <select class="dropdown" id="sentiment-analysis">
                     {% for company in companies %}
                         <option>{{ company }}</option>
                     {% endfor %}
                 </select>
-                
-                <!-- Tree map -->
-                <div class="chart" id="tree-map-container">TREE_MAP</div>
-
+                <div class="chart" id="senti">
+                    <p id="msg_loading_wordcloud" style="text-align: center;">Loading...</p>
+                </div>
             </div>
         </div>
 
@@ -173,14 +177,6 @@
             <script src="{{ url_for('static', filename='js/barchart_handler.js') }}"></script>
         </div>
 
-        <!-- TODO GRAPH 1 -->
-        <div class="dashboard-item">
-            <h2>SEG_2</h2>
-            <div id="sunburst-chart" style="background-color: #ffffff; text-align: center;"></div>
-            <script type="module">
-                import define from "/static/js/interactivebarchart/index.js"; import {Runtime, Library, Inspector} from "/static/js/interactivebarchart/runtime.js"; const runtime = new Runtime(); const main = runtime.module(define, Inspector.into(document.getElementById('sunburst-chart')));
-            </script>
-        </div>
 
         <!-- TODO GRAPH 2 -->
         <div class="dashboard-item">
