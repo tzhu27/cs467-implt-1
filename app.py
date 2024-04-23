@@ -1,5 +1,7 @@
 import pandas as pd
 from flask import Flask, render_template, request, jsonify
+from langdetect import detect
+from textblob import TextBlob
 
 app = Flask(__name__)
 
@@ -36,45 +38,77 @@ def update_word_cloud():
 
 @app.route('/update-sentiment-analysis', methods=['POST'])
 def update_sentiment_analysis():
+    # Create DataFrame from the tweets data
+    cont = pd.DataFrame(tweets)
+    cont = cont.head(5000)
+    # Get JSON data from request
     data = request.get_json()
     company = data.get('selectedCompany')
-    
-    positive_words = ["excellent", "awesome", "positive", "authentic", "resolved", "escalate", "taking action", "brilliant", "phenomenal"]
-    negative_words = [
-    "late", "delayed", "overdue", "awaiting delivery", "difficulty",
-    "expired", "missing", "poor", "damaged", "unsafe",
-    "disappointed", "expired", "unauthorized", "dispute", "barrier", "counterfeit",
-    "hacked", "breached", "stolen", "discontinued", "frustration", "unsatisfactory",
-    "horrible"
-    ]
+    # Language Detection
+    from langdetect import detect, DetectorFactory
 
-    
-    positive_count = 0
-    negative_count = 0
-    sneg = {}
-    spos = {}
-    for tweet in tweets:
-        if company in tweet['text']:
-            text = tweet['text'].lower()  # Convert text to lowercase for case-insensitive matching
-            for word in text.split():
-                if word in positive_words:
-                    if word in spos:
-                        spos[word] += 1
-                    else:
-                        spos[word] = 1
-                    positive_count += 1
-                if word in negative_words:
-                    if word in sneg:
-                        sneg[word] += 1
-                    else:
-                        sneg[word] = 1
-                    negative_count += 1
-        
-    # Return a JSON response with sentiment analysis results
-    pos = dict(sorted(spos.items(), key=lambda item: item[1], reverse=True)[:5])
-    neg = dict(sorted(sneg.items(), key=lambda item: item[1], reverse=True)[:10])
+    def language_detection(text):
+        try:
+            language = detect(text)
+            return(language)
+        except:
+            return('error')
 
-    return jsonify({'Company': company, 'PositiveWords': positive_count, 'NegativeWords': negative_count, 'Pos': pos, 'Neg': neg})
+    cont['language'] = cont['text'].apply(language_detection)
+
+    # Filter to English texts
+    cont = cont[cont['language'] == 'en']
+    # Sentiment Analysis
+    def get_sentiment(text):
+        blob = TextBlob(text)
+        return 'positive' if blob.sentiment.polarity > 0 else 'negative' if blob.sentiment.polarity < 0 else 'neutral'
+    
+    cont['sentiment'] = cont['text'].apply(get_sentiment)
+    # Load positive and negative words
+    positive_words = pd.read_csv('static/data/positive-words.txt', skiprows=35, names=['words'])['words'].tolist()
+    negative_words = pd.read_csv('static/data/negative-words.txt', skiprows=35, names=['words'])['words'].tolist()
+
+    # Count positive and negative words
+    def count_words(tweets, words):
+        word_count = {}
+        c = 0
+        for tweet in tweets:
+            print(company)
+            if company in tweet:
+                print(tweet)
+                text = tweet.split()
+                for word in text:
+                    if word in words:
+                        if word in word_count:
+                            word_count[word] += 1
+                        else:
+                            word_count[word] = 1
+                        c += 1
+        return word_count, c
+
+    all_tweets = cont['text'].values
+    pos_word_counts, posC = count_words(all_tweets, set(positive_words))
+    neg_word_counts, negC = count_words(all_tweets, set(negative_words))
+    
+
+    pos_word = dict(pos_word_counts)
+    neg_word = dict(neg_word_counts)
+
+    posC = len(pos_word)
+    negC = len(neg_word)
+
+    print("OTHAHAAA AHFGHGEHGBHG")
+    print(posC, negC)
+
+    # Sort and select top 10
+    sorted_pos = dict(sorted(pos_word_counts.items(), key=lambda item: item[1], reverse=True)[:10])
+    sorted_neg = dict(sorted(neg_word_counts.items(), key=lambda item: item[1], reverse=True)[:10])
+
+    print("Top 10 Positive Words:", sorted_pos)
+    print("Top 10 Negative Words:", sorted_neg)
+    # Return JSON response
+
+    return jsonify({'Company': company, 'PositiveWords': posC, 'NegativeWords': negC, 'Pos': sorted_pos, 'Neg': sorted_neg})
 
 @app.route('/get-bar-chart-data')
 def get_bar_chart_data():
@@ -98,4 +132,4 @@ def home():
     return render_template('index.html', companies=companies)
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=4001, debug=True)  # It's safer to not use host='0.0.0.0' and port=80 unless specifically needed
+    app.run(host='0.0.0.0', port=4006, debug=True)  # It's safer to not use host='0.0.0.0' and port=80 unless specifically needed
