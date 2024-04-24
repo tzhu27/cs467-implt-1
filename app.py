@@ -5,13 +5,13 @@ import re
 import nltk
 from nltk.corpus import stopwords
 
-def install_nltk():
-    subprocess.check_call(["pip", "install", "nltk"])
+# def install_nltk():
+#     subprocess.check_call(["pip", "install", "nltk"])
 
-try:
-    import nltk
-except ImportError:
-    install_nltk()
+# try:
+#     import nltk
+# except ImportError:
+#     install_nltk()
 
 nltk.download('stopwords', quiet=True)
 from langdetect import detect
