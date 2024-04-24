@@ -1,5 +1,19 @@
 import pandas as pd
 from flask import Flask, render_template, request, jsonify
+import subprocess
+import re
+import nltk
+from nltk.corpus import stopwords
+
+def install_nltk():
+    subprocess.check_call(["pip", "install", "nltk"])
+
+try:
+    import nltk
+except ImportError:
+    install_nltk()
+
+nltk.download('stopwords', quiet=True)
 
 app = Flask(__name__)
 
@@ -18,16 +32,19 @@ def get_companies():
 def update_word_cloud():
     data = request.get_json()
     company = data.get('selectedCompany')
-    
+    stopwords_total = stopwords.words('english')
     words = {}
     for tweet in tweets:
         if tweet['author_id'] == company:
             text = tweet['text'].split(' ')
+            # Check if a word contains only English letters.
             for word in text:
-                if word in words:
-                    words[word] += 1
-                else:
-                    words[word] = 1
+                if bool(re.match('^[a-zA-Z]+$', word)):
+                    if word.lower() not in stopwords_total:
+                        if word in words:
+                            words[word] += 1
+                        else:
+                            words[word] = 1
     
     words_list = [[word, count] for word, count in words.items()]
     
