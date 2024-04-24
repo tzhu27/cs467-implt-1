@@ -47,12 +47,39 @@ def update_sentiment_analysis():
     # Language Detection
     from langdetect import detect, DetectorFactory
 
+<<<<<<< HEAD
     def language_detection(text):
         try:
             language = detect(text)
             return(language)
         except:
             return('error')
+=======
+    positive_count = 0
+    negative_count = 0
+    sneg = {}
+    spos = {}
+    for tweet in tweets:
+        if company in tweet['text']:
+            text = tweet['text'].lower()  # Convert text to lowercase for case-insensitive matching
+            for word in text.split():
+                if word in positive_words:
+                    if word in spos:
+                        spos[word] += 1
+                    else:
+                        spos[word] = 1
+                    positive_count += 1
+                if word in negative_words:
+                    if word in sneg:
+                        sneg[word] += 1
+                    else:
+                        sneg[word] = 1
+                    negative_count += 1
+        
+    # Return a JSON response with sentiment analysis results
+    pos = dict(sorted(spos.items(), key=lambda item: item[1], reverse=True)[:5])
+    neg = dict(sorted(sneg.items(), key=lambda item: item[1], reverse=True)[:10])
+>>>>>>> 7630ac5 (Removed some empty lines)
 
     cont['language'] = cont['text'].apply(language_detection)
 
