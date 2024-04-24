@@ -47,14 +47,6 @@ def update_sentiment_analysis():
     # Language Detection
     from langdetect import detect, DetectorFactory
 
-<<<<<<< HEAD
-    def language_detection(text):
-        try:
-            language = detect(text)
-            return(language)
-        except:
-            return('error')
-=======
     positive_count = 0
     negative_count = 0
     sneg = {}
@@ -79,7 +71,6 @@ def update_sentiment_analysis():
     # Return a JSON response with sentiment analysis results
     pos = dict(sorted(spos.items(), key=lambda item: item[1], reverse=True)[:5])
     neg = dict(sorted(sneg.items(), key=lambda item: item[1], reverse=True)[:10])
->>>>>>> 7630ac5 (Removed some empty lines)
 
     cont['language'] = cont['text'].apply(language_detection)
 
@@ -151,4 +142,4 @@ def home():
     return render_template('index.html', companies=companies)
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=4006, debug=True)  # It's safer to not use host='0.0.0.0' and port=80 unless specifically needed
+    app.run(host='0.0.0.0', port=5000, debug=True)  # It's safer to not use host='0.0.0.0' and port=80 unless specifically needed
