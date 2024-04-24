@@ -73,9 +73,7 @@ def update_sentiment_analysis():
         word_count = {}
         c = 0
         for tweet in tweets:
-            print(company)
             if company in tweet:
-                print(tweet)
                 text = tweet.split()
                 for word in text:
                     if word in words:
@@ -97,15 +95,9 @@ def update_sentiment_analysis():
     posC = len(pos_word)
     negC = len(neg_word)
 
-    print("OTHAHAAA AHFGHGEHGBHG")
-    print(posC, negC)
-
     # Sort and select top 10
     sorted_pos = dict(sorted(pos_word_counts.items(), key=lambda item: item[1], reverse=True)[:10])
     sorted_neg = dict(sorted(neg_word_counts.items(), key=lambda item: item[1], reverse=True)[:10])
-
-    print("Top 10 Positive Words:", sorted_pos)
-    print("Top 10 Negative Words:", sorted_neg)
     # Return JSON response
 
     return jsonify({'Company': company, 'PositiveWords': posC, 'NegativeWords': negC, 'Pos': sorted_pos, 'Neg': sorted_neg})

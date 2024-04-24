@@ -182,7 +182,12 @@
                         <option>{{ company }}</option>
                     {% endfor %}
                 </select>
-                <div class="chart" id="senti">
+
+                <div id="busy-indicator" style="display:none;">
+                    Loading data, please wait...
+                </div>
+
+                <div class="chart" id="senti" style="display:none;">
                     <!-- Add a canvas element for the chart -->
                     <canvas id="combined-chart"></canvas>
                 </div>
