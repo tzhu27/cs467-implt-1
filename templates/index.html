@@ -121,7 +121,7 @@
             width: 100%;
             overflow: hidden;
         }
-
+        
         #barChartTop20RTContainer {
             position: relative;
             background-color: #ffffff;
@@ -195,12 +195,13 @@
                 </select>
 
                 <div id="busy-indicator" style="display:none;">
-                    Loading data, please wait...
+                    <p style="text-align: center;">Loading...</p>
                 </div>
+                <div class="chart">
 
-                <div class="chart" id="senti" style="display:none;">
-                    <!-- Add a canvas element for the chart -->
-                    <canvas id="combined-chart"></canvas>
+                    <div id="senti" style="visibility:hidden; height: 100%; width : 100%;">
+                        <canvas id="combined-chart"></canvas>
+                    </div>
                 </div>
             </div>
         </div>
@@ -230,7 +231,7 @@
             <h2>SEG_3</h2>
             <div class="chart">GRAPH_5</div>
         </div> -->
-        
+
     </div>
 </body>
 

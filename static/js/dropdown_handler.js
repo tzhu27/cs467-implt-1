@@ -37,7 +37,8 @@ var myChart = null;
 
 function sentimentAnalysisExec(selectedCompany) {
     document.getElementById('busy-indicator').style.display = 'block';
-    document.getElementById('senti').style.display = 'none';
+
+    document.getElementById('senti').style.visibility = 'hidden';
     $.ajax({
         url: '/update-sentiment-analysis',
         type: 'POST',
@@ -45,7 +46,7 @@ function sentimentAnalysisExec(selectedCompany) {
         data: JSON.stringify({ 'selectedCompany': selectedCompany }),
         success: function(response) {
             document.getElementById('busy-indicator').style.display = 'none';
-            document.getElementById('senti').style.display = 'block';
+            document.getElementById('senti').style.visibility = 'visible';
             if (response && response.Company) {
                 // Create a horizontal bar chart using Chart.js
                 var ctx = document.getElementById('combined-chart').getContext('2d');
@@ -109,11 +110,12 @@ function sentimentAnalysisExec(selectedCompany) {
         },
         error: function(error) {
             document.getElementById('busy-indicator').style.display = 'none';
-            document.getElementById('senti').style.display = 'block';
+            document.getElementById('senti').style.visibility = 'visible';
             console.error("Error updating SA:", error);
         }
     });
 }
+
 
 /*function displayWords(words) {
     // Assuming words is an object where keys are the words and values are their counts
