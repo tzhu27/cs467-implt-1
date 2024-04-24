@@ -143,6 +143,20 @@ def get_bar_chart_data():
     
     return jsonify({'companyNames': company_names, 'responseRates': response_rates})
 
+@app.route('/get-top20-comp-response-time')
+def get_top20_comp_response_time():
+    data = pd.DataFrame(tweets)
+    data['created_at'] = pd.to_datetime(data['created_at'], format='%a %b %d %H:%M:%S %z %Y')
+    data.sort_values('created_at', inplace=True)
+    data['response_time'] = data.groupby('in_response_to_tweet_id')['created_at'].diff()
+    company_responses = data[data['inbound'] == False]
+    mean_response_times = company_responses.groupby('author_id')['response_time'].mean().dropna()
+    sorted_companies = mean_response_times.sort_values()
+    sorted_companies = sorted_companies.to_frame(name='mean_response_time')
+    sorted_companies['rank'] = pd.qcut(sorted_companies['mean_response_time'], 5, labels=["Quickest", "Quick", "Medium", "Slow", "Slowest"])
+    top_20_companies = sorted_companies.head(20)
+    response = top_20_companies.to_json(orient='index')
+    return jsonify(response)
 
 @app.route('/')
 def home():

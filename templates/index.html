@@ -121,6 +121,15 @@
             width: 100%;
             overflow: hidden;
         }
+
+        #barChartTop20RTContainer {
+            position: relative;
+            background-color: #ffffff;
+            text-align: center;
+            height: 260px;
+            width: 100%;
+            overflow: hidden;
+        }
         
         #msg_loading_barchart {
             position: absolute;
@@ -138,6 +147,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
 <script src="{{ url_for('static', filename='js/wordcloud2.js') }}"></script>
 <script src="{{ url_for('static', filename='js/dropdown_handler.js') }}"></script>
+<script src="{{ url_for('static', filename='js/top20_rt_handler.js') }}"></script>
 <script src="{{ url_for('static', filename='js/zoomable/index.js') }}"></script>
 
 <body>
@@ -208,7 +218,12 @@
         <!-- Response Time Chart -->
         <div class="dashboard-item">
             <h2>Response Time by Company (Top 20)</h2>
+            <div id="barChartTop20RTContainer" style="background-color: #ffffff; text-align: center;">
+                <p id="msg_loading_barchart" style="text-align: center;">Loading...</p>
+                <canvas id="responseTimeChart"></canvas>
+            </div>
         </div>
+
 
         <!-- TODO GRAPH 2
         <div class="dashboard-item">
