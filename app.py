@@ -64,7 +64,7 @@ def update_word_cloud():
 def update_sentiment_analysis():
     keywords = ["raping", "shit", "problem", "issue", "unable", "fuck", "fucking"]
     cont = pd.DataFrame(t1)
-    cont = cont.head(150000)
+    cont = cont.head(200000)
     data = request.get_json()
     company = data.get('selectedCompany')
     #cont['language'] = cont['text'].apply(language_detection)
