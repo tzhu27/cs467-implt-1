@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>XSupportStat</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-image: url('../static/assets/bg.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            margin: 0;
+            padding: 0;
+        }
+        
+        .container {
+            max-width: 95%;
+            margin: auto;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            color: #000000;
+            /* Soft blue for headings */
+        }
+        
+        .dashboard-item1 {
+            background-color: #5cabec;
+            /* Pure white for cards */
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            /* Subtle shadow for depth */
+            background-color: #5cabec;
+            /* Pure white for cards */
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            /* Subtle shadow for depth */
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            transition: box-shadow 0.3s ease-in-out;
+        }
+        
+        .dashboard-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background-color: #5cabec;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            transition: box-shadow 0.3s ease-in-out;
+        }
+        
+        .dashboard-item:hover {
+            box-shadow: 0 5px 15px rgb(163, 163, 163);
+            /* More pronounced shadow on hover */
+        }
+        
+        .dashboard-row {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            gap: 20px;
+        }
+        
+        .dashboard-row>div {
+            flex: 1;
+            min-width: 280px;
+            /* Flexibility with minimum width */
+        }
+        
+        .dropdown,
+        select {
+            width: 100%;
+            padding: 10px;
+            border-radius: 4px;
+            background-color: #ffffff;
+            /* Very light grey for input background */
+            margin-bottom: 20px;
+            box-sizing: border-box;
+            color: #333;
+            /* Text color */
+        }
+        
+        .chart {
+            width: 100%;
+            height: 300px;
+            background-color: #ffffff;
+            /* Light blue grey for chart background */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 4px;
+        }
+        
+        @media (max-width: 768px) {
+            .dashboard-row {
+                flex-direction: column;
+            }
+        }
+        
+        #word-cloud-container {
+            width: 100%;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        #barChartContainer {
+            position: relative;
+            background-color: #ffffff;
+            text-align: center;
+            height: 260px;
+            width: 100%;
+            overflow: hidden;
+        }
+        
+        #barChartTop20RTContainer {
+            position: relative;
+            background-color: #ffffff;
+            text-align: center;
+            height: 260px;
+            width: 100%;
+            overflow: hidden;
+        }
+        
+        #msg_loading_barchart {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 100%;
+            text-align: center;
+        }
+    </style>
+</head>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
+<script src="{{ url_for('static', filename='js/wordcloud2.js') }}"></script>
+<script src="{{ url_for('static', filename='js/dropdown_handler.js') }}"></script>
+<script src="{{ url_for('static', filename='js/top20_rt_handler.js') }}"></script>
+<script src="{{ url_for('static', filename='js/zoomable/index.js') }}"></script>
+
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Dashboard</h1>
+        </div>
+
+        <!-- TODO GRAPH 1 -->
+        <div class="dashboard-item1">
+            <h2 style="text-align: center;">Sectors, brands and categories of issues</h2>
+            <div id="sunburst-chart" style="background-color: #ffffff; text-align: center;"></div>
+            <script type="module">
+                import define from "/static/js/zoomable/index.js"; import {Runtime, Library, Inspector} from "/static/js/zoomable/runtime.js"; const runtime = new Runtime(); const main = runtime.module(define, Inspector.into(document.getElementById('sunburst-chart')));
+            </script>
+        </div>
+
+        <!-- Top graphs -->
+        <div class="dashboard-row">
+            <div class="dashboard-item">
+                <h2>Word Cloud</h2>
+                <p style="text-align: center;">The most frequent words used by the customer support on Twitter</p>
+
+                <!-- Word cloud dropdown -->
+                <select class="dropdown" id="dropdown-word-cloud">
+                    {% for company in companies %}
+                        <option>{{ company }}</option>
+                    {% endfor %}
+                </select>
+
+                <!-- Word cloud -->
+                <div class="chart" id="word-cloud-container">
+                    <p id="msg_loading_tree_map" style="text-align: center;">Loading...</p>
+                </div>
+
+            </div>
+            <div class="dashboard-item">
+                <h2>Sentiment analysis of Brands</h2>
+                <p style="text-align: center;">Sentiment analysis of brands, click on the bar to know something more!</p>
+
+                <select class="dropdown" id="sentiment-analysis">
+                    {% for company in companies %}
+                        <option>{{ company }}</option>
+                    {% endfor %}
+                </select>
+
+                <div id="busy-indicator" style="display:none;">
+                    <p style="text-align: center;">Loading...</p>
+                </div>
+                <div class="chart">
+
+                    <div id="senti" style="visibility:hidden; height: 100%; width : 100%;">
+                        <canvas id="combined-chart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bar Chart -->
+        <div class="dashboard-item">
+            <h2>Response Count by Company (Top 20)</h2>
+            <div id="barChartContainer" style="background-color: #ffffff; text-align: center;">
+                <p id="msg_loading_barchart" style="text-align: center;">Loading...</p>
+                <canvas id="responseRateChart" style="width: 100%; height: 260px; margin: auto;"></canvas>
+            </div>
+            <script src="{{ url_for('static', filename='js/barchart_handler.js') }}"></script>
+        </div>
+
+        <!-- Response Time Chart -->
+        <div class="dashboard-item">
+            <h2>Response Time by Company (Top 20)</h2>
+            <div id="barChartTop20RTContainer" style="background-color: #ffffff; text-align: center;">
+                <p id="msg_loading_barchart" style="text-align: center;">Loading...</p>
+                <canvas id="responseTimeChart"></canvas>
+            </div>
+        </div>
+
+
+        <!-- TODO GRAPH 2
+        <div class="dashboard-item">
+            <h2>SEG_3</h2>
+            <div class="chart">GRAPH_5</div>
+        </div> -->
+
+    </div>
+</body>
+
+</html>
