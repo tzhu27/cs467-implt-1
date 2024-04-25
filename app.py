@@ -62,8 +62,9 @@ def update_word_cloud():
 
 @app.route('/update-sentiment-analysis', methods=['POST'])
 def update_sentiment_analysis():
+    keywords = ["raping", "shit", "problem", "issue", "unable"]
     cont = pd.DataFrame(t1)
-    cont = cont.head(20000)
+    cont = cont.head(30000)
     data = request.get_json()
     company = data.get('selectedCompany')
     #cont['language'] = cont['text'].apply(language_detection)
@@ -79,11 +80,13 @@ def update_sentiment_analysis():
                 text = tweet.split()
                 for word in text:
                     if word in words:
-                        if word in word_count:
-                            word_count[word] += 1
-                        else:
-                            word_count[word] = 1
-                        c += 1
+                        if word not in keywords:
+                            print(word)
+                            if word in word_count:
+                                word_count[word] += 1
+                            else:
+                                word_count[word] = 1
+                            c += 1
         return word_count, c
 
     all_tweets = cont['text'].values
