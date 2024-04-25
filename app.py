@@ -98,32 +98,33 @@ def update_sentiment_analysis():
 
 @app.route('/get-bar-chart-data')
 def get_bar_chart_data():
+    # Calculate response counts as before
     response_counts = {}
     for tweet in tweets:
         company_name = tweet['author_id']
         response_counts[company_name] = response_counts.get(company_name, 0) + 1
-    
-    # Sort and get top 20 companies
+
+    # Sort and get top 20 companies based on response count
     sorted_companies = sorted(response_counts.items(), key=lambda x: x[1], reverse=True)[:20]
     company_names = [company[0] for company in sorted_companies]
     response_rates = [count[1] for count in sorted_companies]
-    
-    return jsonify({'companyNames': company_names, 'responseRates': response_rates})
 
-@app.route('/get-top20-comp-response-time')
-def get_top20_comp_response_time():
+    # Convert created_at to datetime and sort
     data = pd.DataFrame(tweets)
     data['created_at'] = pd.to_datetime(data['created_at'], format='%a %b %d %H:%M:%S %z %Y')
     data.sort_values('created_at', inplace=True)
-    data['response_time'] = data.groupby('in_response_to_tweet_id')['created_at'].diff()
-    company_responses = data[data['inbound'] == False]
-    mean_response_times = company_responses.groupby('author_id')['response_time'].mean().dropna()
-    sorted_companies = mean_response_times.sort_values()
-    sorted_companies = sorted_companies.to_frame(name='mean_response_time')
-    sorted_companies['rank'] = pd.qcut(sorted_companies['mean_response_time'], 5, labels=["Quickest", "Quick", "Medium", "Slow", "Slowest"])
-    top_20_companies = sorted_companies.head(20)
-    response = top_20_companies.to_json(orient='index')
-    return jsonify(response)
+    
+    # Calculate response times only for the top 20 companies
+    top_companies_data = data[data['author_id'].isin(company_names)]
+    top_companies_data['response_time'] = top_companies_data.groupby('in_response_to_tweet_id')['created_at'].diff()
+
+    # Calculate mean response time for each company in seconds and convert to hours
+    mean_response_times = top_companies_data.groupby('author_id')['response_time'].mean().dt.total_seconds() / 3600
+    mean_response_times = mean_response_times.reindex(company_names).fillna(0).tolist()  # Reindex to ensure the order matches company_names and fill missing data with 0
+
+    # Return response rates and mean response times for the top 20 companies
+    return jsonify({'companyNames': company_names, 'responseRates': response_rates, 'meanResponseTimes': mean_response_times})
+
 
 @app.route('/')
 def home():
