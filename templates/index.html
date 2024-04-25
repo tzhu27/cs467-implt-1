@@ -122,6 +122,15 @@
             overflow: hidden;
         }
         
+        #barChartTop20RTContainer {
+            position: relative;
+            background-color: #ffffff;
+            text-align: center;
+            height: 260px;
+            width: 100%;
+            overflow: hidden;
+        }
+        
         #msg_loading_barchart {
             position: absolute;
             top: 50%;
@@ -138,6 +147,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
 <script src="{{ url_for('static', filename='js/wordcloud2.js') }}"></script>
 <script src="{{ url_for('static', filename='js/dropdown_handler.js') }}"></script>
+<script src="{{ url_for('static', filename='js/top20_rt_handler.js') }}"></script>
 <script src="{{ url_for('static', filename='js/zoomable/index.js') }}"></script>
 
 <body>
@@ -185,12 +195,13 @@
                 </select>
 
                 <div id="busy-indicator" style="display:none;">
-                    Loading data, please wait...
+                    <p style="text-align: center;">Loading...</p>
                 </div>
+                <div class="chart">
 
-                <div class="chart" id="senti" style="display:none;">
-                    <!-- Add a canvas element for the chart -->
-                    <canvas id="combined-chart"></canvas>
+                    <div id="senti" style="visibility:hidden; height: 100%; width : 100%;">
+                        <canvas id="combined-chart"></canvas>
+                    </div>
                 </div>
             </div>
         </div>
@@ -200,14 +211,9 @@
             <h2>Response Count by Company (Top 20)</h2>
             <div id="barChartContainer" style="background-color: #ffffff; text-align: center;">
                 <p id="msg_loading_barchart" style="text-align: center;">Loading...</p>
-                <canvas id="responseRateChart" style="width: 100%; height: 260px; margin: auto;"></canvas>
+                <canvas id="responseRateChart" style="width: 100%; height: 350px; margin: auto;"></canvas>
             </div>
             <script src="{{ url_for('static', filename='js/barchart_handler.js') }}"></script>
-        </div>
-
-        <!-- Response Time Chart -->
-        <div class="dashboard-item">
-            <h2>Response Time by Company (Top 20)</h2>
         </div>
 
         <!-- TODO GRAPH 2
@@ -215,7 +221,7 @@
             <h2>SEG_3</h2>
             <div class="chart">GRAPH_5</div>
         </div> -->
-        
+
     </div>
 </body>
 
