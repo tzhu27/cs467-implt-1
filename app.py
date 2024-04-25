@@ -25,11 +25,12 @@ def get_sentiment(text):
 
 
 # Load tweets at app start
-def read_csv():
-    df = pd.read_csv('static/data/twcs.csv')
+def read_csv(file):
+    df = pd.read_csv(file)
     return df.to_dict(orient='records')
 
-tweets = read_csv()
+tweets = read_csv('static/data/twcs.csv')
+t1 = read_csv('static/data/en.csv')
 
 def get_companies():
     # Using list comprehension for readability and ensuring it returns a list
@@ -60,12 +61,12 @@ def update_word_cloud():
 
 @app.route('/update-sentiment-analysis', methods=['POST'])
 def update_sentiment_analysis():
-    cont = pd.DataFrame(tweets)
-    cont = cont.head(5000)
+    cont = pd.DataFrame(t1)
+    cont = cont.head(20000)
     data = request.get_json()
     company = data.get('selectedCompany')
-    cont['language'] = cont['text'].apply(language_detection)
-    cont = cont[cont['language'] == 'en']
+    #cont['language'] = cont['text'].apply(language_detection)
+    #cont = cont[cont['language'] == 'en']
     cont['sentiment'] = cont['text'].apply(get_sentiment)
     positive_words = pd.read_csv('static/data/positive-words.txt', skiprows=35, names=['words'])['words'].tolist()
     negative_words = pd.read_csv('static/data/negative-words.txt', skiprows=35, names=['words'])['words'].tolist()
