@@ -62,9 +62,9 @@ def update_word_cloud():
 
 @app.route('/update-sentiment-analysis', methods=['POST'])
 def update_sentiment_analysis():
-    keywords = ["raping", "shit", "problem", "issue", "unable"]
+    keywords = ["raping", "shit", "problem", "issue", "unable", "fuck", "fucking"]
     cont = pd.DataFrame(t1)
-    cont = cont.head(30000)
+    cont = cont.head(150000)
     data = request.get_json()
     company = data.get('selectedCompany')
     #cont['language'] = cont['text'].apply(language_detection)
@@ -81,7 +81,6 @@ def update_sentiment_analysis():
                 for word in text:
                     if word in words:
                         if word not in keywords:
-                            print(word)
                             if word in word_count:
                                 word_count[word] += 1
                             else:
