@@ -27,6 +27,7 @@ def update_word_cloud():
     data = request.get_json()
     company = data.get('selectedCompany')
     stopwords_total = stopwords.words('english')
+    custom_stopwords = ['dm', 'us', 'hi']
     words = {}
     for tweet in tweets:
         if tweet['author_id'] == company:
@@ -34,11 +35,11 @@ def update_word_cloud():
             # Check if a word contains only English letters.
             for word in text:
                 if bool(re.match('^[a-zA-Z]+$', word)):
-                    if word.lower() not in stopwords_total:
+                    if word.lower() not in stopwords_total and word.lower() not in custom_stopwords:
                         if word in words:
-                            words[word] += 1
+                            words[word.lower()] += 1
                         else:
-                            words[word] = 1
+                            words[word.lower()] = 1
     
     words_list = [[word, count] for word, count in words.items()]
     
