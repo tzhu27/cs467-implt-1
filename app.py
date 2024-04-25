@@ -41,7 +41,13 @@ def update_word_cloud():
     data = request.get_json()
     company = data.get('selectedCompany')
     stopwords_total = stopwords.words('english')
-    custom_stopwords = ['dm', 'us', 'hi']
+    custom_stopwords = [
+        'dm', 'us', 'hi', 'please', 'oh', 'see', 
+        'hey', 'either', 'could', 'and', 'pls', 
+        'would', 'like', 'look', 'via', 'able',
+        'know', 'sorry', 'thanks', 'thank', 'next',
+        'back', 'need', 'help'
+    ]
     words = {}
     for tweet in tweets:
         if tweet['author_id'] == company:
