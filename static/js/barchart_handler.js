@@ -20,22 +20,22 @@ function generateCountResponseBarChart() {
                     labels: companyNames,
                     datasets: [
                         {
-                            label: 'Average Response Time (hours)',
-                            data: meanResponseTimes,
-                            backgroundColor: 'rgba(255, 165, 0, 0.6)',
-                            borderColor: 'rgba(255, 140, 0, 1)',
-                            borderWidth: 1,
-                            yAxisID: 'y-axis-hours',
-                            type: 'line',
-                            fill: false
-                        },
-                        {
                             label: 'Response Count',
                             data: responseRates,
                             backgroundColor: 'rgba(54, 162, 235, 0.6)',
                             borderColor: 'rgba(54, 162, 235, 1)',
                             borderWidth: 1,
                             yAxisID: 'y-axis-counts'
+                        },
+                        {
+                            label: 'Average Response Time (hours)',
+                            data: meanResponseTimes,
+                            backgroundColor: 'rgba(255, 165, 0, 0.6)',
+                            borderColor: 'rgba(255, 140, 0, 1)',
+                            borderWidth: 1,
+                            yAxisID: 'y-axis-hours',
+                            type: 'bar',
+                            fill: false
                         }
                     ]
                 },
@@ -57,7 +57,7 @@ function generateCountResponseBarChart() {
                             position: 'right',
                             beginAtZero: true,
                             min: 0,
-                            max: 13,
+                            max: 11,
                             title: {
                                 display: true,
                                 text: 'Average Response Time (hours)'
@@ -71,7 +71,6 @@ function generateCountResponseBarChart() {
                         }
                     }
                 }
-                
             });
 
             // Remove the loading message, if present

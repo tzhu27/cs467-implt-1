@@ -112,6 +112,10 @@ def get_bar_chart_data():
     for tweet in tweets:
         company_name = tweet['author_id']
         response_counts[company_name] = response_counts.get(company_name, 0) + 1
+    
+    # for key, val in response_counts.items():
+    #     if not(key.isdigit()):
+    #         print(key, val)
 
     # Sort and get top 20 companies based on response count
     sorted_companies = sorted(response_counts.items(), key=lambda x: x[1], reverse=True)[:20]
