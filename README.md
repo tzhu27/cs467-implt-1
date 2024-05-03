@@ -9,9 +9,10 @@ in the Terminal, type:
 - Wait for Python to load
 
 ### Team Contribution: 
-1. Tianning Zhu: UI/UX, Word cloud, Data cleaning, Code optimization
+
+1. Tianning Zhu: UI/UX, Interactive bar chart, Data cleaning, Code optimization
 2. Keerthana Sunder - Zoomable Sunburst Chart, Sentiment vs Brands section (Bar and Pie), Data cleaning (some)
-3. Allan Huang - UI/UX
-4. Qiannian Liang - Interactive bar chart, UI/UX
+3. Allan Huang - UI/UX, Data cleaning(some)
+4. Qiannian Liang - UI/UX, Word cloud, Code optimization 
 
 
